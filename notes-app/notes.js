@@ -1,7 +1,7 @@
 const fs = require("fs");
 const chalk = require('chalk');
 
-const getNotes = function()
+const getNotes = () =>
 {
     return "Your notes...";
 }
@@ -9,11 +9,7 @@ const getNotes = function()
 const addNote = (title, body) =>
 {
     const notes = loadNotes();
-    const duplicateNotes = notes.filter(note =>
-        {
-            return note.title === title;
-        }
-    );
+    const duplicateNotes = notes.filter(note => note.title === title);
 
     if (duplicateNotes.length === 0)
     {
@@ -37,11 +33,7 @@ const addNote = (title, body) =>
 const removeNote = title =>
 {
     const notes = loadNotes();
-    const revisedNotes = notes.filter(note =>
-        {
-            return note.title !== title;
-        }
-    );
+    const revisedNotes = notes.filter(note => note.title !== title);
 
     if (revisedNotes.length < notes.length)
     {
