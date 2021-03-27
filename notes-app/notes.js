@@ -94,7 +94,6 @@ const listNotes = () =>
 
 module.exports = 
 {
-    getNotes,
     addNote,
     removeNote,
     listNotes,
