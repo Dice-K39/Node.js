@@ -4,16 +4,6 @@ const yargs = require("yargs");
 // Customize yargs version
 yargs.version("1.1.0");
 
-/*
-    Challenge: Wire up list command
-
-    1. Create and export listNotes from notes.js
-        - "Your notes" using chalk
-        - Print note title for each note
-    2. Call listNotes from command handler
-    3. Test your work!
-*/
-
 // add, remove, read, list
 yargs.command(
     {
@@ -70,9 +60,18 @@ yargs.command(
     {
         command: "read",
         describe: "Read a note",
-        handler()
+        builder:
         {
-            console.log("Reading a note");
+            title:
+            {
+                describe: "Note Title",
+                demandOption: true,
+                type: "string"
+            }
+        },
+        handler(argv)
+        {
+            notes.readNote(argv.title);
         }
     }
 ).argv;
