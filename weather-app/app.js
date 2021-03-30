@@ -1,12 +1,12 @@
 const request = require("request");
 
-const url = "http://api.weatherstack.com/current?access_key=8e5ce20797f413b84d430f5293a69cb7&query=37.8267,-122.4233";
+const url = "http://api.weatherstack.com/current?access_key=8e5ce20797f413b84d430f5293a69cb7&query=37.8267,-122.4233&units=f";
 
 request({ url: url, json: true }, (error, response) => 
 {
     const temperature = response.body.current;
 
-    console.log("It is currently " + temperature.temperature + " degrees out. It feels like " + temperature.feelslike + " degrees out.");
+    console.log(temperature.weather_descriptions[0] + ". It is currently " + temperature.temperature + " degrees out. It feels like " + temperature.feelslike + " degrees out.");
 });
 
 /* 
