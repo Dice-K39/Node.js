@@ -1,10 +1,28 @@
 const express = require("express");
 const path = require("path");
+const hbs = require("hbs");
+
+/*
+    Challenge: Create a partial for the footer
+
+    1. Setup the template for the footer partial "Created by (your name)"
+    2. Render the partial in the bottom of all three pages
+    3. Test your work by visiting all three pages
+*/
 
 const app = express();
-const publicDirectoryPath = path.join(__dirname, "../public");
 
+// Define paths for Express config
+const publicDirectoryPath = path.join(__dirname, "../public");
+const viewsPath = path.join(__dirname, "../templates/views");
+const partialsPath = path.join(__dirname, "../templates/partials");
+
+// Setup handlebars engine with views location
 app.set("view engine", "hbs");
+app.set("views", viewsPath);
+hbs.registerPartials(partialsPath);
+
+// Setup static directory to serve
 app.use(express.static(publicDirectoryPath));
 
 app.get("", (req, res) =>
@@ -25,20 +43,13 @@ app.get("/about", (req, res) =>
     });
 });
 
-/*
-    Challenge: Create a template for help page
-
-    1. Setup a help template to render a help message to the screen
-    2. Setup the help route and render the template with an example message
-    3. Visit the route in the browser and see your help message print
-*/
-
 app.get("/help", (req, res) =>
 {
     res.render("help",
     {
         title: "Help page",
-        message: "Sorry. No help for you!"
+        message: "Sorry. No help for you!",
+        name: "Dice"
     });
 });
 
