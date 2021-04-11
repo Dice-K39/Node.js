@@ -1,6 +1,8 @@
 const express = require("express");
 const path = require("path");
 const hbs = require("hbs");
+const geocode = require("./utils/geocode");
+const forecast = require("./utils/forecast");
 
 const app = express();
 
@@ -46,16 +48,18 @@ app.get("/help", (req, res) =>
 });
 
 /*
-    Challenge: Update weather endpoint to accept address
+    Challenge: Wire up /weather
 
-    1. No address? Send back an error message to
-    2. Address? Send back the static JSON
-        - Add address property onto JSON which returns the provided address
-    3. Test /weather and /weather?address=atlanta
+    1. Require geocode/forecast into app.js
+    2. Use the address to geocode
+    3. Use the coordinates to get forecast
+    4. Send back the real forecast and location
 */
 app.get("/weather", (req, res) =>
 {
-    if (!req.query.address)
+    const address = req.query.address;
+
+    if (!address)
     {
         return res.send(
             {
@@ -64,13 +68,38 @@ app.get("/weather", (req, res) =>
         );
     }
 
-    res.send(
+    geocode(address, (error, { latitude, longitude, place_name } = {}) =>
+    {
+        if (error)
         {
-            forecast: "Sunny with a chance of rain",
-            location: "Atlanta",
-            address: req.query.address
+            return res.send(
+                {
+                    error
+                }
+            );
         }
-    );
+
+        forecast(latitude, longitude, (error, { weather_descriptions, temperature, feelslike, city} = {}) => 
+        {
+            if (error)
+            {
+                return res.send(
+                    {
+                        error
+                    }
+                );
+            }
+    
+            res.send(
+                {
+                    location: city,
+                    temperature: temperature,
+                    feelsLike: feelslike,
+                    weatherDescription: weather_descriptions
+                }
+            );
+        });
+    });
 });
 
 app.get("/products", (req, res) =>
