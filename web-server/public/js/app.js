@@ -2,6 +2,8 @@ const weatherForm = document.querySelector("form");
 const search = document.querySelector("input");
 const messageOne = document.querySelector("#message-1");
 const messageTwo = document.querySelector("#message-2");
+const messageThree = document.querySelector("#message-3");
+const weatherDescriptionImage = document.querySelector("#image");
 
 weatherForm.addEventListener("submit", (event) => 
 {
@@ -9,8 +11,10 @@ weatherForm.addEventListener("submit", (event) =>
     
     const location = search.value;
 
+    weatherDescriptionImage.innerHTML = "";
     messageOne.textContent = "Loading. . . ";
     messageTwo.textContent = "";
+    messageThree.textContent = "";
 
     fetch("/weather?address=" + location)
         .then(res => res.json())
@@ -22,8 +26,10 @@ weatherForm.addEventListener("submit", (event) =>
                 }
                 else 
                 {
-                    messageOne.textContent = "Location: " + data.location;
-                    messageTwo.textContent = "Weather Description: " + data.weatherDescription + "Temperature: " + data.temperature;
+                    weatherDescriptionImage.innerHTML = `<img src=${data.weatherIcons} />`
+                    messageOne.textContent = `Location: ${data.city}, ${data.state} ${data.country}`;
+                    messageTwo.textContent = "Weather Description: " + data.weatherDescription + " Temperature: " + data.temperature;
+                    messageThree.textContent = "Humidity: " + data.humidity;
                 }
             }
         );

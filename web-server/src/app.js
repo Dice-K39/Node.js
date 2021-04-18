@@ -72,7 +72,7 @@ app.get("/weather", (req, res) =>
             );
         }
 
-        forecast(latitude, longitude, (error, { weather_descriptions, temperature, feelslike, city} = {}) => 
+        forecast(latitude, longitude, (error, { weather_descriptions, temperature, feelslike, weather_icons, humidity, city, state, country} = {}) => 
         {
             if (error)
             {
@@ -85,9 +85,13 @@ app.get("/weather", (req, res) =>
     
             res.send(
                 {
-                    location: city,
+                    city,
+                    state,
+                    country,
                     temperature: temperature,
                     feelsLike: feelslike,
+                    weatherIcons: weather_icons,
+                    humidity: humidity,
                     weatherDescription: weather_descriptions
                 }
             );
