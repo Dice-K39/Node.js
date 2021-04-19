@@ -8,11 +8,6 @@ const { MongoClient, ObjectID } = require("mongodb")
 const connectionURL = "mongodb://127.0.0.1:27017" // local host IP
 const databaseName = "task-manager"
 
-const id = new ObjectID()
-
-console.log(id.id.length)
-console.log(id.toHexString().length)
-
 MongoClient.connect(connectionURL, { useUnifiedTopology: true, useNewUrlParser: true }, (error, client) => // useUnifiedTopology to get rid of deprecation warning
 {
     if (error)
@@ -22,68 +17,46 @@ MongoClient.connect(connectionURL, { useUnifiedTopology: true, useNewUrlParser: 
 
     const db = client.db(databaseName)
 
-    // db.collection("users").insertOne(
-    //     {
-    //         name: "Dice",
-    //         age: 20
-    //     }
-    // , (error, result) =>
+    // db.collection("users").findOne({ _id: new ObjectID("607d8851ff20d0344fed11c1") }, (error, user) =>
     // {
     //     if (error)
     //     {
-    //         return console.log("Unable to insert user")
+    //         console.log("Unable to fetch.")
     //     }
 
-    //     console.log(result.ops)
+    //     console.log(user)
     // })
 
-    // db.collection("users").insertMany(
-    //     [
-    //         {
-    //             name: "John",
-    //             age: 100
-    //         },
-    //         {
-    //             name: "Jen",
-    //             age: 26
-    //         }
-    //     ]
-    // , (error, result) =>
+    // db.collection("users").find({ age: 20 }).toArray((error, users) =>
     // {
-    //     if (error)
-    //     {
-    //         console.log("Unable to insert documents!")
-    //     }
-
-    //     console.log(result.ops)
+    //     console.log(users)
     // })
 
-//    db.collection("tasks").insertMany(
-//        [
-//            {
-//                description: "Wake up",
-//                completed: true
-//            },
-//            {
-//                description: "Get COVID-19 vaccine",
-//                completed: false
-//            },
-//            {
-//                description: "Get lunch",
-//                completed: false
-//            },
-//            {
-//                description: "Go to work",
-//                completed: false
-//            }
-//        ], (error, result) =>
-//        {
-//            if (error)
-//            {
-//                console.log("Unable to insert documents!")
-//            }
+    /* 
+        Challenge: Use find and findOne with tasks
 
-//            console.log(result.ops)
-//        }
-//    )
+        1. Use findOne to fetch the last task by its id (print doc to console)
+        2. Use find to fetch all tasks that are not completed (print docs to console)
+        3. Test your work!
+    */
+
+    db.collection("tasks").findOne({ _id: new ObjectID("607d8a540c89cd3612b5a44c") }, (error, task) =>
+    {
+        if (error)
+        {
+            return console.log("Unable to fetch.")
+        }
+
+        console.log(task)
+    })
+
+    db.collection("tasks").find({ completed: false }).toArray((error, tasks) =>
+    {
+        if (error)
+        {
+            return console.log("Unable to fetch.")
+        }
+
+        console.log(tasks)
+    })
 })
