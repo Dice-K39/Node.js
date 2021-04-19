@@ -1,9 +1,17 @@
 // CRUD create read update delete
-const mongodb = require("mongodb")
-const MongoClient = mongodb.MongoClient
+// const mongodb = require("mongodb")
+// const MongoClient = mongodb.MongoClient
+// const ObjectID = mongodb.ObjectID
+
+const { MongoClient, ObjectID } = require("mongodb")
 
 const connectionURL = "mongodb://127.0.0.1:27017" // local host IP
 const databaseName = "task-manager"
+
+const id = new ObjectID()
+
+console.log(id.id.length)
+console.log(id.toHexString().length)
 
 MongoClient.connect(connectionURL, { useUnifiedTopology: true, useNewUrlParser: true }, (error, client) => // useUnifiedTopology to get rid of deprecation warning
 {
@@ -17,7 +25,7 @@ MongoClient.connect(connectionURL, { useUnifiedTopology: true, useNewUrlParser: 
     // db.collection("users").insertOne(
     //     {
     //         name: "Dice",
-    //         age: 40
+    //         age: 20
     //     }
     // , (error, result) =>
     // {
@@ -50,41 +58,32 @@ MongoClient.connect(connectionURL, { useUnifiedTopology: true, useNewUrlParser: 
     //     console.log(result.ops)
     // })
 
-    /*
-        Challenge: Insert 3 tasks into a new tasks collection
+//    db.collection("tasks").insertMany(
+//        [
+//            {
+//                description: "Wake up",
+//                completed: true
+//            },
+//            {
+//                description: "Get COVID-19 vaccine",
+//                completed: false
+//            },
+//            {
+//                description: "Get lunch",
+//                completed: false
+//            },
+//            {
+//                description: "Go to work",
+//                completed: false
+//            }
+//        ], (error, result) =>
+//        {
+//            if (error)
+//            {
+//                console.log("Unable to insert documents!")
+//            }
 
-        1. Use insertMany to insert the documents
-            - description (string), completed(boolean)
-        2. Setup the callback to handle error or print ops
-        3. Run the script
-        4. Refresh the database in Robo 3t and view data in tasks collection
-    */
-   db.collection("tasks").insertMany(
-       [
-           {
-               description: "Wake up",
-               completed: true
-           },
-           {
-               description: "Get COVID-19 vaccine",
-               completed: false
-           },
-           {
-               description: "Get lunch",
-               completed: false
-           },
-           {
-               description: "Go to work",
-               completed: false
-           }
-       ], (error, result) =>
-       {
-           if (error)
-           {
-               console.log("Unable to insert documents!")
-           }
-
-           console.log(result.ops)
-       }
-   )
+//            console.log(result.ops)
+//        }
+//    )
 })
