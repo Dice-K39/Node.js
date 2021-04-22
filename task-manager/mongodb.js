@@ -17,46 +17,47 @@ MongoClient.connect(connectionURL, { useUnifiedTopology: true, useNewUrlParser: 
 
     const db = client.db(databaseName)
 
-    // db.collection("users").findOne({ _id: new ObjectID("607d8851ff20d0344fed11c1") }, (error, user) =>
-    // {
-    //     if (error)
+    // db.collection("users").updateOne(
     //     {
-    //         console.log("Unable to fetch.")
+    //         _id: new ObjectID("607d8851ff20d0344fed11c0")
+    //     },
+    //     {
+    //         $inc:
+    //         {
+    //             age: 1
+    //         }
     //     }
-
-    //     console.log(user)
-    // })
-
-    // db.collection("users").find({ age: 20 }).toArray((error, users) =>
+    // ).then((result) =>
     // {
-    //     console.log(users)
+    //     console.log(result);
+    // }).catch((error) =>
+    // {
+    //     console.log(error);
     // })
 
-    /* 
-        Challenge: Use find and findOne with tasks
+    /*
+        Challenge: Use updateMany to complete all tasks
 
-        1. Use findOne to fetch the last task by its id (print doc to console)
-        2. Use find to fetch all tasks that are not completed (print docs to console)
-        3. Test your work!
+        1. Check the documentation for updateMany
+        2. Setup the call with the query and the updates
+        3. Use promise methods to setup the success/error handlers
+        4. Test your work!
     */
-
-    db.collection("tasks").findOne({ _id: new ObjectID("607d8a540c89cd3612b5a44c") }, (error, task) =>
-    {
-        if (error)
+    db.collection("tasks").updateMany(
         {
-            return console.log("Unable to fetch.")
-        }
-
-        console.log(task)
-    })
-
-    db.collection("tasks").find({ completed: false }).toArray((error, tasks) =>
-    {
-        if (error)
+            completed: false
+        },
         {
-            return console.log("Unable to fetch.")
+            $set:
+            {
+                completed: true
+            }
         }
-
-        console.log(tasks)
+    ).then((result) =>
+    {
+        console.log(result);
+    }).catch((error) => 
+    {
+        console.log(error);
     })
 })
