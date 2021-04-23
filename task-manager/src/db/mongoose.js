@@ -19,17 +19,52 @@ const User = mongoose.model("User",
     }
 });
 
-const me = new User(
+// const me = new User(
+//     {
+//         name: "Dice",
+//         age: "Drew"
+//     }
+// );
+
+// me.save().then(() =>
+// {
+//     console.log(me);
+// }).catch(error =>
+// {
+//     console.log("Error!", error);
+// });
+
+/* 
+    Challenge: Create a model for tasks
+
+    1. Define the model with description and completed fields
+    2. Create a new instance of the model
+    3. Save the model to the database
+    4. Test your work
+*/
+const Task = mongoose.model("Task",
+{
+    description:
     {
-        name: "Dice",
-        age: "Drew"
+        type: String
+    },
+    completed:
+    {
+        type: Boolean
+    }
+});
+
+const task = new Task(
+    {
+        description: "Buy jeans",
+        completed: false
     }
 );
 
-me.save().then(() =>
+task.save().then(() =>
 {
-    console.log(me);
-}).catch(error =>
+    console.log(task);
+}).catch((error) =>
 {
     console.log("Error!", error);
 });
