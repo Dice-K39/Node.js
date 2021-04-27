@@ -17,7 +17,8 @@ app.post("/users", async (req, res) =>
         await user.save();
 
         res.status(201).send(user);
-    } catch (error)
+    } 
+    catch (error)
     {
         res.status(400).send(error);
     }
@@ -38,7 +39,8 @@ app.get("/users", async (req, res) =>
         const users = await User.find({});
 
         res.send(users);
-    } catch (error)
+    } 
+    catch (error)
     {
         res.status(500).send();
     }
@@ -66,7 +68,8 @@ app.get("/users/:id", async (req, res) =>
         }
 
         res.send(user);
-    } catch (error)
+    } 
+    catch (error)
     {
         res.status(500).send();
     }
@@ -85,12 +88,33 @@ app.get("/users/:id", async (req, res) =>
     // });
 });
 
-/*
-    Goal: Refactor task routes to use async/await
+app.patch("/users/:id", async (req, res) =>
+{
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ["name", "email", "password", "age"];
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
-    1. Refactor task routes to use async/await
-    2. Test all routes in Postman
-*/
+    if (!isValidOperation)
+    {
+        return res.status(400).send({ error: "Invalid updates!" });
+    }
+
+    try
+    {
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+
+        if (!user)
+        {
+            return res.status(404).send();
+        }
+
+        res.send(user);
+    } 
+    catch (error)
+    {
+        res.status(400).send(error);
+    }
+});
 
 app.post("/tasks", async (req, res) =>
 {
@@ -101,7 +125,8 @@ app.post("/tasks", async (req, res) =>
         await task.save();
 
         res.status(201).send(task);
-    } catch (error)
+    } 
+    catch (error)
     {
         res.status(400).send(error);
     }
@@ -122,7 +147,8 @@ app.get("/tasks", async (req, res) =>
         const tasks = await Task.find({});
 
         res.send(tasks);
-    } catch (error)
+    } 
+    catch (error)
     {
         res.status(500).send();
     }
@@ -150,7 +176,8 @@ app.get("/tasks/:id", async (req, res) =>
         }
 
         res.send(task);
-    } catch (error)
+    } 
+    catch (error)
     {
         res.status(500).send();
     }
@@ -167,6 +194,45 @@ app.get("/tasks/:id", async (req, res) =>
     // {
     //     res.status(500).send();
     // })
+});
+
+/*
+    Goal: Allow for task updates
+
+    1. Setup the route handler
+    2. Send error if unknown updates
+    3. Attempt to update the task
+        - Handle task not found
+        - Handle validation errors
+        - Handle success
+    4. Test your work!
+*/
+app.patch("/tasks/:id", async (req, res) => 
+{
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ["description", "completed"];
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+
+    if (!isValidOperation)
+    {
+        return res.status(400).send({ error: "Invalid update!"})
+    }
+
+    try
+    {
+        const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+
+        if (!task)
+        {
+            return res.status(404).send();
+        }
+
+        res.send(task);
+    }
+    catch (error)
+    {
+        res.status(400).send();
+    }
 });
 
 app.listen(port, () =>
