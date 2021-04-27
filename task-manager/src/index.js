@@ -116,6 +116,25 @@ app.patch("/users/:id", async (req, res) =>
     }
 });
 
+app.delete("/users/:id", async (req, res) =>
+{
+    try
+    {
+        const user = await User.findByIdAndDelete(req.params.id);
+
+        if (!user)
+        {
+            return res.status(404).send();
+        }
+
+        res.send(user)
+    }
+    catch (error)
+    {
+        res.status(500).send();
+    }
+});
+
 app.post("/tasks", async (req, res) =>
 {
     const task = new Task(req.body);
@@ -196,17 +215,6 @@ app.get("/tasks/:id", async (req, res) =>
     // })
 });
 
-/*
-    Goal: Allow for task updates
-
-    1. Setup the route handler
-    2. Send error if unknown updates
-    3. Attempt to update the task
-        - Handle task not found
-        - Handle validation errors
-        - Handle success
-    4. Test your work!
-*/
 app.patch("/tasks/:id", async (req, res) => 
 {
     const updates = Object.keys(req.body);
@@ -232,6 +240,35 @@ app.patch("/tasks/:id", async (req, res) =>
     catch (error)
     {
         res.status(400).send();
+    }
+});
+
+/*
+    Goal: Allow for removal of tasks
+
+    1. Setup the endpoint handler
+    2. Attempt to delete a task by id
+        - Handle success
+        - Handle task not found
+        - Handle error
+    3. Test your work
+*/
+app.delete("/tasks/:id", async (req, res) =>
+{
+    try
+    {
+        const task = await Task.findByIdAndDelete(req.params.id);
+
+        if (!task)
+        {
+            return res.status(404).send({ error: "Task not found."});
+        }
+
+        res.send(task);
+    }
+    catch (error)
+    {
+        res.status(500).send();
     }
 });
 
