@@ -52,7 +52,7 @@ const userSchema = new mongoose.Schema(
     }
 });
 
-// Have to be a regular function, not an arrow function. Runs before a save.
+// Middleware: Have to be a regular function, not an arrow function. Runs before a save.
 userSchema.pre("save", async function (next)
 {
     const user = this;
