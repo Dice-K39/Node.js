@@ -2,13 +2,6 @@ const express = require("express");
 const router = new express.Router();
 const User = require("../models/user");
 
-/*
-    Goal: Have signup send back auth token
-
-    1. Generate a token for the saved user
-    2. Send back both the token and the user
-    3. Create a new user from Postman and confirm the token is there
-*/
 router.post("/users", async (req, res) =>
 {
     const user = new User(req.body);
@@ -16,7 +9,7 @@ router.post("/users", async (req, res) =>
     try
     {        
         await user.save();
-        
+
         const token = await user.generateAuthToken();
         
         res.status(201).send({ user, token });
@@ -25,14 +18,6 @@ router.post("/users", async (req, res) =>
     {
         res.status(400).send(error);
     }
-
-    // user.save().then(() =>
-    // {
-    //     res.status(201).send(user);
-    // }).catch((error) =>
-    // {
-    //     res.status(400).send(error);
-    // });
 });
 
 router.post("/users/login", async (req, res) =>
@@ -62,14 +47,6 @@ router.get("/users", async (req, res) =>
     {
         res.status(500).send();
     }
-
-    // User.find({}).then((users) =>
-    // {
-    //     res.send(users)
-    // }).catch((error) =>
-    // {
-    //     res.status(500).send();
-    // });
 });
 
 router.get("/users/:id", async (req, res) =>
@@ -91,19 +68,6 @@ router.get("/users/:id", async (req, res) =>
     {
         res.status(500).send();
     }
-
-    // User.findById(_id).then((user) =>
-    // {
-    //     if (!user)
-    //     {
-    //         return res.status(404).send();
-    //     }
-
-    //     res.send(user);
-    // }).catch((error) =>
-    // {
-    //     res.status(500).send();
-    // });
 });
 
 router.patch("/users/:id", async (req, res) =>
@@ -124,8 +88,6 @@ router.patch("/users/:id", async (req, res) =>
         updates.forEach((update) => user[update] = req.body[update]);
 
         await user.save();
-        
-        // const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
 
         if (!user)
         {
