@@ -24,14 +24,6 @@ router.post("/tasks", auth, async (req, res) =>
     }
 });
 
-/*
-    Goal: Refactor GET /tasks
-
-    1. Add authentication
-    2. Return tasks only for the authenticated user
-    3. Test your work!
-*/
-
 router.get("/tasks", auth, async (req, res) =>
 {
     try
@@ -98,14 +90,6 @@ router.patch("/tasks/:id", auth, async (req, res) =>
         res.status(400).send();
     }
 });
-
-/*
-    Goal: Refactor DELETE /tasks/:id
-
-    1. Add authentication
-    2. Find the task by _id/owner (findOneAndDelete)
-    3. Test your work!
-*/
 
 router.delete("/tasks/:id", auth, async (req, res) =>
 {
