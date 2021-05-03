@@ -24,6 +24,7 @@ router.post("/tasks", auth, async (req, res) =>
     }
 });
 
+// GET /tasks?completed=true
 router.get("/tasks", auth, async (req, res) =>
 {
     const match = {};
