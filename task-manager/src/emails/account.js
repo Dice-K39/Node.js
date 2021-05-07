@@ -37,7 +37,7 @@ const sendCancelationEmail = (email, name) =>
 //             auth: 
 //             {
 //                 user: "daisukehashimoto39@gmail.com",
-//                 pass: process.env.MAIL_PASSWORD
+//                 pass: process.env.GMAIL_PASSWORD
 //             }
 //         }
 //     );
