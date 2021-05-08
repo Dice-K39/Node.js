@@ -3,15 +3,6 @@ const sendgridAPIKey = process.env.SENDGRID_API_KEY;
 
 sgMail.setApiKey(sendgridAPIKey);
 
-/*
-    Goal: Pull JWT secret and database URL into env variables
-
-    1. Create two new env variables: JWT_SECRET and MONGODB_URL
-    2. Setup values for each in the development env files
-    3. Swap out three hardcoded values
-    4. Test your work. Create new user and get their profile
-*/
-
 const sendWelcomeEmail = (email, name) =>
 {
     sgMail.send(
