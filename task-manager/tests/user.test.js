@@ -60,13 +60,6 @@ test("Should signup a new user", async () =>
     expect(user.password).not.toBe("MyPass777!");
 });
 
-/*
-    Goal: Validate new token is saved
-
-    1. Fetch the user from the database
-    2. Assert that token in response matches users second token
-    3. Test your work!
-*/
 test("Should login existing user", async () =>
 {
     const response = await request(app).post("/users/login").send(
@@ -108,13 +101,6 @@ test("Should not get profile for unauthenticated user", async () =>
         .expect(401);
 });
 
-/*
-    Goal: Validate user is removed
-
-    1. Fetch the user from the database
-    2. Assert null response (use assertion from signup test)
-    3. Test your work!
-*/
 test("Should delete account for user", async () =>
 {
     await request(app)
