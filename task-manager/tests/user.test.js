@@ -121,3 +121,56 @@ test("Should not delete account for unauthenticated user", async () =>
         .send()
         .expect(401);
 });
+
+test("Should upload avatar image", async () =>
+{
+    await request(app)
+        .post("/users/me/avatar")
+        .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
+        .attach("avatar", "tests/fixtures/profile-pic.jpg")
+        .expect(200);
+
+    const user = await User.findById(userOneId);
+
+    expect(user.avatar).toEqual(expect.any(Buffer));
+});
+
+/*
+    Goal: Test user updates
+
+    1. Create "Should update valid user fields"
+        - Update the name of the test user
+        - Check the data to confirm it's changed
+    2. Create "Should not update invalid user fields"
+        - Update a "location" field and expect error status code
+    3. Test your work!
+*/
+test("Should update valid user fields", async () =>
+{
+    await request(app)
+        .patch("/users/me")
+        .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
+        .send(
+            {
+                name: "Drew"
+            }
+        )
+        .expect(200);
+
+    const user = await User.findById(userOneId);
+
+    expect(user.name).toEqual("Drew");
+});
+
+test("Should not update invalid user fields", async () =>
+{
+    await request(app)
+        .patch("/users/me")
+        .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
+        .send(
+            {
+                location: "Atlanta"
+            }
+        )
+        .expect(400);
+});
