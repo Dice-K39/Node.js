@@ -1,29 +1,10 @@
 const request = require("supertest");
-const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const app = require("../src/app");
 const User = require("../src/models/user");
+const { userOneId, userOne, setupDatabase } = require("./fixtures/db");
 
-const userOneId = new mongoose.Types.ObjectId();
-const userOne = 
-{
-    _id: userOneId,
-    name: "Mike",
-    email: "mike@example.com",
-    password: "56what!!",
-    tokens:
-    [
-        {
-            token: jwt.sign({ _id: userOneId }, process.env.JWT_SECRET)
-        }
-    ]
-}
-
-beforeEach(async () =>
-{
-    await User.deleteMany();
-    await new User(userOne).save();
-});
+beforeEach(setupDatabase);
 
 afterAll(() =>
 {
@@ -135,16 +116,6 @@ test("Should upload avatar image", async () =>
     expect(user.avatar).toEqual(expect.any(Buffer));
 });
 
-/*
-    Goal: Test user updates
-
-    1. Create "Should update valid user fields"
-        - Update the name of the test user
-        - Check the data to confirm it's changed
-    2. Create "Should not update invalid user fields"
-        - Update a "location" field and expect error status code
-    3. Test your work!
-*/
 test("Should update valid user fields", async () =>
 {
     await request(app)
