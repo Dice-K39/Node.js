@@ -150,7 +150,103 @@ test("Should not update invalid user fields", async () =>
 //
 // User Test Ideas
 //
-// Should not signup user with invalid name/email/password
-// Should not update user if unauthenticated
-// Should not update user with invalid name/email/password
-// Should not delete user if unauthenticated
+test("Should not signup user with invalid name", async () =>
+{
+    await request(app)
+        .post("/users")
+        .send(
+            {
+                name: "",
+                email: "noname@example.com",
+                password: "1234567890"
+            }
+        )
+        .expect(400);
+});
+
+test("Should not signup user with invalid email", async () =>
+{
+    await request(app)
+        .post("/users")
+        .send(
+            {
+                name: "Chris",
+                email: "chris@example",
+                password: "0987654321"
+            }
+        )
+        .expect(400);
+});
+
+test("Should not signup user with invalid password", async () =>
+{
+    await request(app)
+        .post("/users")
+        .send(
+            {
+                name: "Leon",
+                email: "leaon@example.com",
+                password: "1234"
+            }
+        )
+        .expect(400);
+});
+
+test("Should not update user if unauthenticated", async () =>
+{
+    await request(app)
+        .patch("/users/me")
+        .send(
+            {
+                name: "Dice"
+            }
+        )
+        .expect(401);
+});
+
+test("Should not update user with invalid name", async () =>
+{
+    await request(app)
+        .patch("/users/me")
+        .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
+        .send(
+            {
+                name: ""
+            }
+        )
+        .expect(400);
+});
+
+test("Should not update user with invalid email", async () =>
+{
+    await request(app)
+        .patch("/users/me")
+        .set("Authorization", `Bearer ${userTwo.tokens[0].token}`)
+        .send(
+            {
+                email: "@example.com"
+            }
+        )
+        .expect(400);
+});
+
+test("Should not update user with invalid password", async () =>
+{
+    await request(app)
+        .patch("/users/me")
+        .set("Authorization", ` Bearer ${userTwo.tokens[0].token}`)
+        .send(
+            {
+                password: "1234"
+            }
+        )
+        .expect(400);
+});
+
+test("Should not delete user if unauthenticated", async () =>
+{
+    await request(app)
+        .delete("/users/me")
+        .send()
+        .expect(401);
+});
