@@ -1,31 +1,23 @@
-/*
-    Goal 1: Create an Express web server
-
-    1. Initialize npm and install Express
-    2. Setup a new Express server
-        - Serve up the public directory
-        - Listen on port 3000
-    3. Create index.html and render "Chat App" to the screen
-    4. Test your work! Start the server and view the page in the browser
-
-    Goal 2: Setup scripts in package.json
-
-    1. Create a "start" script to start the app using node
-    2. Install nodemon and a development dependency
-    3. Create a "dev" script to start the app using nodemon
-    4. Run both scripts to test your work!
-*/
 const path = require("path");
+const http = require("http");
 const express = require("express");
+const socketio = require("socket.io");
 
 const app = express();
+const server = http.createServer(app);
+const io = socketio(server);
 
 const port = process.env.PORT || 3000;
-const publicDirectoryPath = path .join(__dirname, "../public");
+const publicDirectoryPath = path.join(__dirname, "../public");
 
 app.use(express.static(publicDirectoryPath));
 
-app.listen(port, () =>
+io.on("connection", () =>
+{
+    console.log("New WebSocket connection");
+});
+
+server.listen(port, () =>
 {
     console.log(`Server is up on port ${port}`);
 });
