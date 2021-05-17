@@ -5,10 +5,21 @@ const $messageForm = document.querySelector("#message-form");
 const $messageFormInput = $messageForm.querySelector("input");
 const $messageFormButton = $messageForm.querySelector("button");
 const $sendLocationButton = document.querySelector("#send-location");
+const $messages = document.querySelector("#messages");
+
+// Templates
+const messageTemplate = document.querySelector("#message-template").innerHTML;
 
 socket.on("message", (message) =>
 {
     console.log(message);
+
+    const html = Mustache.render(messageTemplate,
+    {
+        message
+    });
+
+    $messages.insertAdjacentHTML("beforeend", html);
 });
 
 $messageForm.addEventListener("submit", (event) =>
@@ -34,14 +45,6 @@ $messageForm.addEventListener("submit", (event) =>
     });
 });
 
-/*
-    Goal: Disable the send location button while location being sent
-
-    1. Set up a selector at the top of the file
-    2. Disable the button just before getting the current position
-    3. Enable the button in the acknowledgment callback
-    4. Test your work!
-*/
 $sendLocationButton.addEventListener("click", () =>
 {
     if (!navigator.geolocation)
