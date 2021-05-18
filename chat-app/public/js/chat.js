@@ -11,42 +11,38 @@ const $messages = document.querySelector("#messages");
 const messageTemplate = document.querySelector("#message-template").innerHTML;
 const locationTemplate = document.querySelector("#location-template").innerHTML;
 
+/*
+    Goal: Add timestamps for location messages
+
+    1. Create generateLocationMessage and export
+        - { url: "", createdAt: 0 }
+    2. Use generateLocationMessage when server emits locationMessage
+    3. Update template to render time before the url
+    4. Compile the template with the URL and the formatted time
+    5. Test your work!
+*/
+
 socket.on("message", (message) =>
 {
     console.log(message);
     
     const html = Mustache.render(messageTemplate,
     {
-        message
+        message: message.text,
+        createdAt: moment(message.createdAt).format("h:mm:ss a")
     });
         
-        $messages.insertAdjacentHTML("beforeend", html);
-    });
-    
-/*
-    Goal 1: Create a separate event for location sharing messages
+    $messages.insertAdjacentHTML("beforeend", html);
+});
 
-    1. Have server emit "locationMessage" with the URL
-    2. Have the client listen for "locationMessage" and print the URL to the console
-    3. Test your work by sharing a location
-
-    Goal 2: Render new template for location messages
-
-    1. Duplicate the message template
-        - Change the id to something else
-    2. Add a link inside the paragraph with the link text "My Current location"
-        - URL for link should be the maps URL (dynamic)
-    3. Select the template from JavaScript
-    4. Render the template with the URL and append to messages list
-    5. Test your work!
-*/
-socket.on("locationMessage", (url) =>
+socket.on("locationMessage", (message) =>
 {
-    console.log(url);
-    
+    console.log(message);
+
     const html = Mustache.render(locationTemplate,
     {
-        url  
+        url: message.url,
+        createdAt: moment(message.createdAt).format("h:mm:ss a")
     });
 
     $messages.insertAdjacentHTML("beforeend", html);
