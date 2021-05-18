@@ -11,17 +11,6 @@ const $messages = document.querySelector("#messages");
 const messageTemplate = document.querySelector("#message-template").innerHTML;
 const locationTemplate = document.querySelector("#location-template").innerHTML;
 
-/*
-    Goal: Add timestamps for location messages
-
-    1. Create generateLocationMessage and export
-        - { url: "", createdAt: 0 }
-    2. Use generateLocationMessage when server emits locationMessage
-    3. Update template to render time before the url
-    4. Compile the template with the URL and the formatted time
-    5. Test your work!
-*/
-
 socket.on("message", (message) =>
 {
     console.log(message);
