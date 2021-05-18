@@ -18,9 +18,14 @@ io.on("connection", (socket) =>
 {
     console.log("New WebSocket connection");
 
-    socket.emit("message", generateMessage("Welcome!"));
+    socket.on("join", ({ username, room }) =>
+    {
+        socket.join(room);
 
-    socket.broadcast.emit("message", generateMessage("A new user has joined!"));
+        socket.emit("message", generateMessage("Welcome!"));
+
+        socket.broadcast.to(room).emit("message", generateMessage(`${username} has joined!`));
+    });
 
     socket.on("sendMessage", (message, callback) =>
     {
@@ -31,7 +36,7 @@ io.on("connection", (socket) =>
             return callback("Profanity is not allowed!");
         }
 
-        io.emit("message", generateMessage(message));
+        io.to("Marietta").emit("message", generateMessage(message));
 
         callback();
     });
