@@ -30,15 +30,32 @@ io.on("connection", (socket) =>
 
         socket.join(user.room);
 
-        socket.emit("message", generateMessage("Welcome!"));
+        socket.emit("message", generateMessage("Admin", "Welcome!"));
 
-        socket.broadcast.to(user.room).emit("message", generateMessage(`${user.username} has joined!`));
+        socket.broadcast.to(user.room).emit("message", generateMessage("Admin", `${user.username} has joined!`));
 
         callback();
     });
 
+    /*
+        Goal 1: Send messages to correct room
+
+        1. Use getUser inside "sendMessage" event handler to get user data
+        2. Emit the message to their current room
+        3. Test your work!
+        4. Repeat for "sendLocation"
+
+        Goal 2: Render username for text messages
+
+        1. Setup the server to send username to client
+        2. Edit every call to "generateMessage" to include message
+            - Use "Admin" for sys messages like connect/welcome/disconnect
+        3. Update client to render username in template
+        4. Test your work!
+    */
     socket.on("sendMessage", (message, callback) =>
     {
+        const user = getUser(socket.id);
         const filter = new Filter();
 
         if (filter.isProfane(message))
@@ -46,14 +63,16 @@ io.on("connection", (socket) =>
             return callback("Profanity is not allowed!");
         }
 
-        io.to("Marietta").emit("message", generateMessage(message));
+        io.to(user.room).emit("message", generateMessage(user.username, message));
 
         callback();
     });
 
     socket.on("sendLocation", (coordinate, callback) =>
     {
-        io.emit("locationMessage", generateLocationMessage(`https://google.com/maps?q=${coordinate.latitude},${coordinate.longitude}`));
+        const user = getUser(socket.id);
+
+        io.to(user.room).emit("locationMessage", generateLocationMessage(user.username, `https://google.com/maps?q=${coordinate.latitude},${coordinate.longitude}`));
 
         callback();
     });
@@ -64,7 +83,7 @@ io.on("connection", (socket) =>
 
         if (user)
         {
-            io.to(user.room).emit("message", generateMessage(`${user.username} has left!`));
+            io.to(user.room).emit("message", generateMessage("Admin", `${user.username} has left!`));
         }
 
     });
